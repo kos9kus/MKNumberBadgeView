@@ -79,11 +79,11 @@
 	self.shadow = YES;
 	self.shadowOffset = CGSizeMake(0, 3);
 	self.shine = YES;
-	self.alignment = UITextAlignmentCenter;
+	self.alignment = NSTextAlignmentCenter;
 	self.fillColor = [UIColor redColor];
 	self.strokeColor = [UIColor whiteColor];
 	self.textColor = [UIColor whiteColor];
-	self.hideWhenZero = NO;
+	self.hideWhenZero = YES;
 	self.userInteractionEnabled = NO; // so the badge view doesn't intercept touches when placed above a button
 	
 	self.backgroundColor = [UIColor clearColor];
@@ -97,10 +97,12 @@
 	
 	CGContextRef curContext = UIGraphicsGetCurrentContext();
 
-	NSString* numberString = [NSString stringWithFormat:@"%d",self.value];
+	NSString* numberString = [NSString stringWithFormat:@"%lu",(unsigned long)self.value];
 	
 	
-	CGSize numberSize = [numberString sizeWithFont:self.font];
+    CGSize numberSize = [numberString sizeWithAttributes:@{ NSFontAttributeName : self.font }];
+
+    
 		
 	CGPathRef badgePath = [self newBadgePathForTextSize:numberSize];
 	
@@ -128,13 +130,13 @@
 	switch (self.alignment) 
 	{
 		default:
-		case UITextAlignmentCenter:
+		case NSTextAlignmentCenter:
 			ctm = CGPointMake( round((viewBounds.size.width - badgeRect.size.width)/2), round((viewBounds.size.height - badgeRect.size.height)/2) );
 			break;
-		case UITextAlignmentLeft:
+		case NSTextAlignmentLeft:
 			ctm = CGPointMake( 0, round((viewBounds.size.height - badgeRect.size.height)/2) );
 			break;
-		case UITextAlignmentRight:
+		case NSTextAlignmentRight:
 			ctm = CGPointMake( (viewBounds.size.width - badgeRect.size.width), round((viewBounds.size.height - badgeRect.size.height)/2) );
 			break;
 	}
@@ -213,7 +215,7 @@
 		
 	CGPoint textPt = CGPointMake( ctm.x + (badgeRect.size.width - numberSize.width)/2 , ctm.y + (badgeRect.size.height - numberSize.height)/2 );
 	
-	[numberString drawAtPoint:textPt withFont:self.font];
+    [numberString drawAtPoint:textPt withAttributes:@{ NSFontAttributeName : self.font }];
 
 	CGContextRestoreGState( curContext );
 
@@ -269,10 +271,10 @@
 
 - (CGSize)badgeSize
 {
-	NSString* numberString = [NSString stringWithFormat:@"%d",self.value];
+	NSString* numberString = [NSString stringWithFormat:@"%lu",(unsigned long)self.value];
 	
 	
-	CGSize numberSize = [numberString sizeWithFont:self.font];
+    CGSize numberSize = [numberString sizeWithAttributes:@{ NSFontAttributeName : self.font }]; 
 	
 	CGPathRef badgePath = [self newBadgePathForTextSize:numberSize];
 	
